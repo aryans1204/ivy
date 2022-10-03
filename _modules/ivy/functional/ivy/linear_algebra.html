@@ -1460,6 +1460,21 @@
 <span class="sd">    but this function is *nestable*, and therefore also accepts :class:`ivy.Container`</span>
 <span class="sd">    instances in place of any of the arguments.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; A = ivy.array([[12., -51, 4], [6, 167, -68], [-4, 24, -41]])</span>
+<span class="sd">    &gt;&gt;&gt; Q, R = ivy.qr(A, mode=&quot;reduced&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(Q)</span>
+<span class="sd">    ivy.array([[-0.8571,  0.3943,  0.3314],</span>
+<span class="sd">        [-0.4286, -0.9029, -0.0343],</span>
+<span class="sd">        [ 0.2857, -0.1714,  0.9429]])</span>
+<span class="sd">    &gt;&gt;&gt; print(R)</span>
+<span class="sd">    ivy.array([[ -14.0000,  -21.0000,   14.0000],</span>
+<span class="sd">        [   0.0000, -175.0000,   70.0000],</span>
+<span class="sd">        [   0.0000,    0.0000,  -35.0000]])</span>
+<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">current_backend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">qr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span></div>
 
