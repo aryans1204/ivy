@@ -469,7 +469,7 @@ Generally, we have made decisions so that Ivy is as stable and scalable as possi
 <p>With the design as currently presented, there would be a small performance hit every time we call an Ivy function by virtue of the added Python wrapping. One reason we created the graph compiler was to address this issue.</p>
 <p>The compiler takes in any Ivy function, backend function, or composition, and returns the computation graph using the backend functional API only. The dependency graph for this process looks like this:</p>
 <a class="reference internal image-reference" href="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/compiler_dependency_graph.png?raw=true"><img alt="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/compiler_dependency_graph.png?raw=true" class="align-center" src="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/compiler_dependency_graph.png?raw=true" style="width: 75%;" /></a>
-<p>Let’s look at a few examples, and observe the compiled graph of the requisite Ivy code, based on the desired backend.</p>
+<p>Let’s look at a few examples, and observe the compiled graph of the Ivy code against the native backend code.</p>
 <p>First, let’s set our desired backend as torch.</p>
 <table class="docutils align-default">
 <colgroup>
@@ -548,10 +548,13 @@ Generally, we have made decisions so that Ivy is as stable and scalable as possi
 </tbody>
 </table>
 <a class="reference internal image-reference" href="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/compiled_graph_a.png?raw=true"><img alt="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/compiled_graph_a.png?raw=true" class="align-center" src="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/compiled_graph_a.png?raw=true" style="width: 75%;" /></a>
+<p>In this example, we observe that both the Ivy code, and the native backend code, compile to the same desired backend code, which in our example was torch.
+Furthermore, the mix of Ivy and native backend code also compiles to the same graph in torch.</p>
 <p>Now, let’s take another example, this time setting the desired backend as tensorflow as tf.</p>
 <a class="reference internal image-reference" href="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/tf_graph_example.png?raw=true"><img alt="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/tf_graph_example.png?raw=true" class="align-center" src="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/tf_graph_example.png?raw=true" style="width: 75%;" /></a>
-<p>In both the examples, we observe that the same Ivy code, is converted into different computation graphs, based on the set framework. Similarly, we’ve also observed that using a mix of
-Ivy and the desired framework code, also creates the same computation graph as using pure Ivy code. Therefore, all Ivy code is converted into the set backend specific computation graph.</p>
+<p>Additionally, in the above example we also observe that Ivy code and native backend code is compiled to the desired backend code for any framework, not just torch.
+Another important point to observe is that the nodes in the compiled graph are not Ivy frontend functions, but rather the desired backend framework functions, so there
+is no further code conversions required after graph compilation.</p>
 <p>For all existing ML frameworks, the functional API is the backbone which underpins all higher level functions and classes. This means that under the hood, any code can be expressed as a composition of ops in the functional API. The same is true for Ivy. Therefore, when compiling the graph with Ivy, any higher-level classes or extra code which does not directly contribute towards the computation graph is excluded. For example, the following 3 pieces of code all compile to the exact same computation graph as shown:</p>
 <table class="docutils align-default">
 <colgroup>
