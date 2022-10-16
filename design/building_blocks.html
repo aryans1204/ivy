@@ -95,14 +95,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Framework Classes</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/converters.html">Converters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/sequential.html">Sequential</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/activations.html">Activations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/module.html">Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/optimizers.html">Optimizers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/norms.html">Norms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/layers.html">Layers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../stateful/initializers.html">Initializers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/module.html">Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/sequential.html">Sequential</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/activations.html">Activations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/layers.html">Layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/converters.html">Converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/norms.html">Norms</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Docs</span></p>
 <ul>
@@ -548,13 +548,39 @@ Generally, we have made decisions so that Ivy is as stable and scalable as possi
 </tbody>
 </table>
 <a class="reference internal image-reference" href="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/compiled_graph_a.png?raw=true"><img alt="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/compiled_graph_a.png?raw=true" class="align-center" src="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/compiled_graph_a.png?raw=true" style="width: 75%;" /></a>
-<p>In this example, we observe that both the Ivy code, and the native backend code, compile to the same desired backend code, which in our example was torch.
-Furthermore, the mix of Ivy and native backend code also compiles to the same graph in torch.</p>
-<p>Now, let’s take another example, this time setting the desired backend as tensorflow as tf.</p>
+<p>In this example we observe how ivy code, raw torch code, and also a mixture of ivy and torch code all compile to the same torch computation graph.</p>
+<p>Now, let’s take another example, this time observing how the same Ivy code will compile to different backends.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ivy_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">ivy</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">ivy</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">ivy</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span>
+
+<span class="c1"># input</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ivy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">]])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ivy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">]])</span>
+<span class="c1"># create graph</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">ivy</span><span class="o">.</span><span class="n">compile_graph</span><span class="p">(</span>
+    <span class="n">ivy_func</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># call graph</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">graph</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Now, let’s look at the compilec codes when we set the backend to tensorflow, torch and numpy respectively.</p>
 <a class="reference internal image-reference" href="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/tf_graph_example.png?raw=true"><img alt="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/tf_graph_example.png?raw=true" class="align-center" src="https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/design/tf_graph_example.png?raw=true" style="width: 75%;" /></a>
-<p>Additionally, in the above example we also observe that Ivy code and native backend code is compiled to the desired backend code for any framework, not just torch.
-Another important point to observe is that the nodes in the compiled graph are not Ivy frontend functions, but rather the desired backend framework functions, so there
-is no further code conversions required after graph compilation.</p>
+<p>The example above further emphasizes that the graph compiler creates a computation graph consisting of backend functions, not Ivy functions.
+Specifically, the same Ivy code compiles to different graphs depending on the selected backend. However, when compiling native framework code, we are only able to compile a graph for that same framework.
+For example, we cannot take torch code and compile this into tensorflow code. However, we can transpile torch code into tensorflow code (see :ref:Ivy as a Transpiler for more details).</p>
 <p>For all existing ML frameworks, the functional API is the backbone which underpins all higher level functions and classes. This means that under the hood, any code can be expressed as a composition of ops in the functional API. The same is true for Ivy. Therefore, when compiling the graph with Ivy, any higher-level classes or extra code which does not directly contribute towards the computation graph is excluded. For example, the following 3 pieces of code all compile to the exact same computation graph as shown:</p>
 <table class="docutils align-default">
 <colgroup>
