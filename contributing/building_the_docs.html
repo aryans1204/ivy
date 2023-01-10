@@ -54,12 +54,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#dockerless-doc-building">Dockerless Doc-building</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#using-miniconda">Using miniconda</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#using-venv">Using venv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Building the docs</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#working-of-the-documentation-building-pipeline">Working of the Documentation Building Pipeline</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#make-docs-sh">make_docs.sh:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#entrypoint-sh">entrypoint.sh:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id1">_make_docs.sh:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">_make_docs.sh:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#generate-src-rst-files-py">generate_src_rst_files.py:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sphinx-build-py">sphinx-build.py</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#correct-built-html-files-py">correct_built_html_files.py</a></li>
@@ -80,14 +81,15 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../functional/extensions.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functional/ivy/experimental.html">Experimental</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../functional/ivy/activations.html">Activations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../functional/ivy/compilation.html">Compilation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../functional/ivy/constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functional/ivy/control_flow_ops.html">Control flow ops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../functional/ivy/creation.html">Creation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../functional/ivy/data_type.html">Data type</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../functional/ivy/device.html">Device</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../functional/ivy/elementwise.html">Elementwise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functional/ivy/experimental.html">Experimental</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../functional/ivy/general.html">General</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../functional/ivy/gradients.html">Gradients</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../functional/ivy/layers.html">Layers</a></li>
@@ -111,14 +113,19 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Framework Classes</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/norms.html">Norms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/optimizers.html">Optimizers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/initializers.html">Initializers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/sequential.html">Sequential</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../stateful/activations.html">Activations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../stateful/layers.html">Layers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stateful/module.html">Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../stateful/converters.html">Converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/module.html">Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/initializers.html">Initializers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/helpers.html">Helpers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/sequential.html">Sequential</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/norms.html">Norms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stateful/optimizers.html">Optimizers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nested array</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../nested_array/nested_array.html">Nested array</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Docs</span></p>
 <ul>
@@ -165,6 +172,13 @@
 <ol class="arabic">
 <li><p>Build the docker image using the doc-builder Dockerfile</p></li>
 <li><p>Clone or pull the <code class="code docutils literal notranslate"><span class="pre">unifyai/doc-builder</span></code> repository</p></li>
+<li><p>Change to the doc-builder folder</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd doc-builder
+</pre></div>
+</div>
+</div></blockquote>
+</li>
 <li><p>Build the docker image using the following command</p>
 <blockquote>
 <div><ol class="arabic">
@@ -191,7 +205,7 @@
 <li><p>Clone or pull the <code class="code docutils literal notranslate"><span class="pre">unifyai/ivy</span></code> repository.</p></li>
 <li><p>Change to the docs folder</p>
 <blockquote>
-<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd docs
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd ivy\docs
 </pre></div>
 </div>
 </div></blockquote>
@@ -255,7 +269,7 @@ After cloning repos, we need to create a virtual environment using either <a cla
 </section>
 <section id="using-venv">
 <h3>Using venv<a class="headerlink" href="#using-venv" title="Permalink to this heading"></a></h3>
-<p>This is a builtin package and doesn’t require explicit installation.</p>
+<p>This is a built-in package and doesn’t require explicit installation.</p>
 <ol class="arabic">
 <li><p>Open your terminal/cmd in the directory where you would like to have the folder with the environment files</p></li>
 <li><p>Create the environment by running the command below with a new environment name. We named it <code class="code docutils literal notranslate"><span class="pre">ivy_dev</span></code> like above.</p>
@@ -280,8 +294,11 @@ After cloning repos, we need to create a virtual environment using either <a cla
 </div></blockquote>
 </li>
 </ol>
+</section>
+<section id="id1">
+<h3>Building the docs<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <p>After setting up the virtual environment, we can build the documentation locally.
-Move to the <cite>ivy/docs</cite> folder in a terminal and execute the following command to build the docs from inside the virtual environment.</p>
+Move to the <code class="code docutils literal notranslate"><span class="pre">ivy/docs</span></code> folder in a terminal and execute the following command to build the docs from inside the virtual environment.</p>
 <ol class="arabic">
 <li><p>For Windows users</p>
 <blockquote>
@@ -305,7 +322,7 @@ Move to the <cite>ivy/docs</cite> folder in a terminal and execute the following
 </div></blockquote>
 </li>
 </ol>
-<p>Assuming that we cloned the <cite>doc-builder</cite> and <cite>ivy</cite> repositories in the same folder, we can run <cite>make_docs_without_docker.sh</cite> as follows:</p>
+<p>Assuming that we cloned the <code class="code docutils literal notranslate"><span class="pre">doc-builder</span></code> and <code class="code docutils literal notranslate"><span class="pre">ivy</span></code> repositories in the same folder, we can run <code class="code docutils literal notranslate"><span class="pre">make_docs_without_docker.sh</span></code> as follows:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>bash make_docs_without_docker.sh ../../doc-builder/
 </pre></div>
 </div>
@@ -327,8 +344,8 @@ It uses the unifyai/doc-builder:latest image and creates a container for documen
 It installs the requirements, synchronizes the container’s folder with the project’s build folder.
 It is responsible for executing the rest of the pipeline as it runs the <code class="code docutils literal notranslate"><span class="pre">_make_docs.sh</span></code> and <code class="code docutils literal notranslate"><span class="pre">remove_docs.sh</span></code> files.</p>
 </section>
-<section id="id1">
-<h3>_make_docs.sh:<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<section id="id2">
+<h3>_make_docs.sh:<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <div class="line-block">
 <div class="line">This file contains commands for executing files involved in generation of the documentation. _ at the start is to indicate that this is a privately accessed file.</div>
 <div class="line">This file fulfils the following purpose</div>
